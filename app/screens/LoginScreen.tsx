@@ -16,6 +16,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
+  const [errorMessage, seterrorMessage] = useState("")
   const {
     authenticationStore: {
       authEmail,
@@ -43,22 +44,25 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         Accept: "application/json",
       },
     })
-    api
-      .post("http://api.cup2022.ir/api/v1/user/login", { email: authEmail, password: authPassword })
-      .then((response: ApiResponse<AuthResponse>) => {
-        const rawData = response.data
-        setAuthToken(rawData.data.token)
-      })
+
     setIsSubmitted(true)
     setAttemptsCount(attemptsCount + 1)
 
     if (Object.values(validationErrors).some((v) => !!v)) return
 
-    // Make a request to your server to get an authentication token.
-    // If successful, reset the fields and set the token.
-    setIsSubmitted(false)
-    setAuthPassword("")
-    setAuthEmail("")
+    api
+      .post("http://api.cup2022.ir/api/v1/user/login", { email: authEmail, password: authPassword })
+      .then((response: ApiResponse<AuthResponse>) => {
+        try {
+          const rawData = response.data
+          setAuthToken(rawData.data.token)
+          setIsSubmitted(false)
+          setAuthPassword("")
+          setAuthEmail("")
+        } catch (err) {
+          seterrorMessage(err.message)
+        }
+      })
 
     // We'll mock this with a fake token.
   }
@@ -134,6 +138,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         preset="reversed"
         onPress={login}
       />
+      <Text>{errorMessage}</Text>
     </Screen>
   )
 })

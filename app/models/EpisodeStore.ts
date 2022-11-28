@@ -17,6 +17,7 @@ export const EpisodeStoreModel = types
       if (response.kind === "ok") {
         store.setProp("episodes", response.episodes)
       } else {
+        console.log("kind",response.kind)
         console.tron.error(`Error fetching episodes: ${JSON.stringify(response)}`, [])
       }
     },

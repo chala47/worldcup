@@ -100,7 +100,7 @@ const MatchsCard = observer(function EpisodeCard({
           >{match.time_elapsed==="notstarted"?`${match.local_date}`:`${match.home_score} - ${match.away_score}`}</Text>
         </View>
       }
-      RightComponent={
+      LeftComponent={
         <View style={{ flex: 1, flexDirection: "column" }}>
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text>{match.home_team_en}</Text>
@@ -115,7 +115,7 @@ const MatchsCard = observer(function EpisodeCard({
           </View>
         </View>
       }
-      LeftComponent={
+      RightComponent={
         <View style={{ flex: 1, flexDirection: "column" }}>
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text>{match.away_team_en}</Text>
