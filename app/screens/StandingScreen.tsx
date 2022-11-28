@@ -44,10 +44,13 @@ export const StandingScreen: FC<DemoTabScreenProps<"Standings">> = observer(func
   useEffect(() => {
     ;(async function load() {
       setIsLoading(true)
-      await standingStore.fetchStandings(authenticationStore.authToken)
+      standingStore.fetchStandings(authenticationStore.authToken).then((response)=>{
+        if(response==='unauthorized')
+        authenticationStore.logout()
+      })
       setIsLoading(false)
     })()
-  }, [standingStore])
+  }, [standingStore,authenticationStore.authToken])
 
   // simulate a longer refresh, if the refresh is too fast for UX
   async function manualRefresh() {
@@ -79,7 +82,6 @@ export const StandingScreen: FC<DemoTabScreenProps<"Standings">> = observer(func
 const StandingTable = observer(function EpisodeCard({
   teams,
   group,
-  onPressFavorite,
 }: {
   teams: StandingTeam[]
   group: string
@@ -123,7 +125,7 @@ const StandingTeams = (props) => {
           </View>
         }
         RightComponent={
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row",justifyContent:'flex-end',alignItems:'flex-end' }}>
             <Text style={$tableHeader}>{"mp"}</Text>
             <Text style={$tableHeader}>{"w"}</Text>
             <Text style={$tableHeader}>{"d"}</Text>
@@ -136,8 +138,9 @@ const StandingTeams = (props) => {
         }
       />
       {orderList.map((i) => (
-        <View style={{ flex: 1 }}>
+        <View key={i.team_id} style={{ flex: 1 }}>
           <ListItem
+            key={i.team_id}
             LeftComponent={
               <View style={{ flexDirection: "row" }}>
                 <Image
@@ -151,7 +154,7 @@ const StandingTeams = (props) => {
               </View>
             }
             RightComponent={
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row",justifyContent:'flex-end',alignItems:'flex-end'}}>
                 <Text style={$tableList}>{i.mp}</Text>
                 <Text style={$tableList}>{i.w}</Text>
                 <Text style={$tableList}>{i.d}</Text>
@@ -215,7 +218,7 @@ const $iconContainer: ViewStyle = {
 
 const $tableHeader: TextStyle = {
   padding: 6,
-  alignItems: "center",
+  alignItems: "flex-end",
   fontWeight:'bold'
 }
 

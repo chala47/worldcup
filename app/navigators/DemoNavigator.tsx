@@ -4,10 +4,9 @@ import React, { useLayoutEffect } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
-import { translate } from "../i18n"
-import { DemoShowroomScreen } from "../screens"
-import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
+import { MatchesScreenListScreen } from "../screens/MatchesScreen"
 import { StandingScreen } from "../screens/StandingScreen"
+import { StatsScreen } from "../screens/StatsScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -36,16 +35,18 @@ export function DemoNavigator({ navigation }) {
       screenOptions={{
         ...globalOptions,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [$tabBar, { height: bottom + 70 }],
-        tabBarActiveTintColor: colors.text,
-        tabBarInactiveTintColor: colors.text,
+        tabBarStyle: [$tabBar, { height: bottom + 50 }],
+        tabBarActiveTintColor: "white",
+        tabBarActiveBackgroundColor:"#8a1538",
+        tabBarInactiveBackgroundColor:"#8a1538",
+        tabBarInactiveTintColor: "black",
         tabBarLabelStyle: $tabBarLabel,
         tabBarItemStyle: $tabBarItem,
       }}
     >
       <Tab.Screen
         name="DemoPodcastList"
-        component={DemoPodcastListScreen}
+        component={MatchesScreenListScreen}
         options={{
           tabBarLabel: "matches",
           tabBarIcon: ({ focused }) => <Icon icon="podcast" color={focused && colors.tint} />,
@@ -62,8 +63,9 @@ export function DemoNavigator({ navigation }) {
 
       <Tab.Screen
         name="DemoDebug"
-        component={DemoPodcastListScreen}
+        component={StatsScreen}
         options={{
+          headerShown: false, 
           tabBarLabel: "stats",
           tabBarIcon: ({ focused }) => <Icon icon="debug" color={focused && colors.tint} />,
         }}
@@ -78,13 +80,13 @@ const $tabBar: ViewStyle = {
 }
 
 const $tabBarItem: ViewStyle = {
-  paddingTop: spacing.medium,
+  paddingTop: spacing.small,
 }
 
 const $tabBarLabel: TextStyle = {
   fontSize: 12,
   fontFamily: typography.primary.medium,
-  lineHeight: 16,
+  lineHeight: 15,
   flex: 1,
 }
 

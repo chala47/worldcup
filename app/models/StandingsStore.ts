@@ -16,7 +16,8 @@ export const StandingsStoreModel = types
       if (response.kind === "ok") {
         store.setProp("Standings", response.standings)
       } else {
-        console.tron.error(`Error fetching Standings: ${JSON.stringify(response)}`, [])
+      console.tron.error(`Error fetching Standings: ${JSON.stringify(response)}`, [])
+      return response.kind
       }
     },
   }))

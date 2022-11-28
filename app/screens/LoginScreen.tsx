@@ -54,7 +54,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       .post("http://api.cup2022.ir/api/v1/user/login", { email: authEmail, password: authPassword })
       .then((response: ApiResponse<AuthResponse>) => {
         try {
-          const rawData = response.data
+          const rawData = response?.data
           setAuthToken(rawData.data.token)
           setIsSubmitted(false)
           setAuthPassword("")
@@ -94,11 +94,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       preset="auto"
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
+      backgroundColor='#8a1538'
     >
       <Text testID="login-heading" tx="loginScreen.signIn" preset="heading" style={$signIn} />
-      <Text tx="loginScreen.enterDetails" preset="subheading" style={$enterDetails} />
-      {attemptsCount > 2 && <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />}
-
       <TextField
         value={authEmail}
         onChangeText={setAuthEmail}
@@ -112,6 +110,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         helper={errors?.authEmail}
         status={errors?.authEmail ? "error" : undefined}
         onSubmitEditing={() => authPasswordInput.current?.focus()}
+        LabelTextProps={{style:{color:"white"}}}
       />
 
       <TextField
@@ -124,6 +123,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         autoCorrect={false}
         secureTextEntry={isAuthPasswordHidden}
         labelTx="loginScreen.passwordFieldLabel"
+        LabelTextProps={{style:{color:"white"}}}
         placeholderTx="loginScreen.passwordFieldPlaceholder"
         helper={errors?.authPassword}
         status={errors?.authPassword ? "error" : undefined}
@@ -146,9 +146,11 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 const $screenContentContainer: ViewStyle = {
   paddingVertical: spacing.huge,
   paddingHorizontal: spacing.large,
+  marginTop:spacing.huge
 }
 
 const $signIn: TextStyle = {
+  color:'white',
   marginBottom: spacing.small,
 }
 

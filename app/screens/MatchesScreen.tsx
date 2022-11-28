@@ -20,8 +20,8 @@ import { delay } from "../utils/delay"
 
 const ICON_SIZE = 14
 
-export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
-  function DemoPodcastListScreen(_props) {
+export const MatchesScreenListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
+  function MatchesScreenListScreen(_props) {
     const { episodeStore ,authenticationStore} = useStores()
 
     const [refreshing, setRefreshing] = React.useState(false)
@@ -37,13 +37,17 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
         ),
       });
     }, [navigation])
+    
     useEffect(() => {
       ;(async function load() {
         setIsLoading(true)
-        await episodeStore.fetchEpisodes(authenticationStore.authToken)
+        episodeStore.fetchEpisodes(authenticationStore.authToken).then((response)=>{
+          if(response==='unauthorized')
+          authenticationStore.logout()
+        })
         setIsLoading(false)
       })()
-    }, [episodeStore])
+    }, [episodeStore,authenticationStore.authToken])
 
     // simulate a longer refresh, if the refresh is too fast for UX
     async function manualRefresh() {
