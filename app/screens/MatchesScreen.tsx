@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-inline-styles */
 // Interested in migrating from FlatList to FlashList? Check out the recipe in our Ignite Cookbook
 // https://infinitered.github.io/ignite-cookbook/docs/MigratingToFlashList
 import { observer } from "mobx-react-lite"
@@ -11,21 +13,19 @@ import {
   ViewStyle,
 } from "react-native"
 import { Card, Screen, Text } from "../components"
-import { isRTL } from "../i18n"
 import { useStores } from "../models"
 import { Episode } from "../models/Episode"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
 
-const ICON_SIZE = 14
 
 export const MatchesScreenListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
   function MatchesScreenListScreen(_props) {
     const { episodeStore ,authenticationStore} = useStores()
-
+      
     const [refreshing, setRefreshing] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState(false)
+    const [, setIsLoading] = React.useState(false)
     const {navigation}=_props;
     useLayoutEffect(() => {
       navigation.setOptions({
@@ -37,9 +37,10 @@ export const MatchesScreenListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> 
         ),
       });
     }, [navigation])
-    
+
     useEffect(() => {
       ;(async function load() {
+        
         setIsLoading(true)
         episodeStore.fetchEpisodes(authenticationStore.authToken).then((response)=>{
           if(response==='unauthorized')
@@ -47,7 +48,7 @@ export const MatchesScreenListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> 
         })
         setIsLoading(false)
       })()
-    }, [episodeStore,authenticationStore.authToken])
+    }, [episodeStore,authenticationStore])
 
     // simulate a longer refresh, if the refresh is too fast for UX
     async function manualRefresh() {
@@ -63,7 +64,7 @@ export const MatchesScreenListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> 
       >
         <FlatList<Episode>
           data={episodeStore.episodesForList}
-          // extraData={newsFeedsStore}
+          extraData={episodeStore}
           contentContainerStyle={$flatListContentContainer}
           refreshing={refreshing}
           onRefresh={manualRefresh}
@@ -148,10 +149,6 @@ const $flatListContentContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }
 
-const $heading: ViewStyle = {
-  marginBottom: spacing.medium,
-}
-
 const $item: ViewStyle = {
   flex: 1,
   padding: spacing.medium,
@@ -167,21 +164,6 @@ const $itemThumbnail: ImageStyle = {
   borderRadius: 50,
 }
 
-const $toggle: ViewStyle = {
-  marginTop: spacing.medium,
-}
-
-const $labelStyle: TextStyle = {
-  textAlign: "left",
-}
-
-const $iconContainer: ViewStyle = {
-  height: ICON_SIZE,
-  width: ICON_SIZE,
-  flexDirection: "row",
-  marginRight: spacing.small,
-}
-
 const $metadata: TextStyle = {
   flex: 1,
  
@@ -192,30 +174,4 @@ const $metadata: TextStyle = {
 const $metadataText: TextStyle = {
   marginTop:0,
   fontWeight:'bold'
-}
-
-const $favoriteButton: ViewStyle = {
-  borderRadius: 17,
-  marginTop: spacing.medium,
-  justifyContent: "flex-start",
-  backgroundColor: colors.palette.neutral300,
-  borderColor: colors.palette.neutral300,
-  paddingHorizontal: spacing.medium,
-  paddingTop: spacing.micro,
-  paddingBottom: 0,
-  minHeight: 32,
-  alignSelf: "flex-start",
-}
-
-const $unFavoriteButton: ViewStyle = {
-  borderColor: colors.palette.primary100,
-  backgroundColor: colors.palette.primary100,
-}
-
-const $emptyState: ViewStyle = {
-  marginTop: spacing.huge,
-}
-
-const $emptyStateImage: ImageStyle = {
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
 }

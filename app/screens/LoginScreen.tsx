@@ -4,9 +4,9 @@ import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { TextInput, TextStyle, ViewStyle } from "react-native"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
-import { AuthenticationStoreSnapshot } from "../models/AuthenticationStore"
 import { AppStackScreenProps } from "../navigators"
 import { AuthResponse } from "../services/api"
+import { getGeneralApiProblem } from "../services/api/apiProblem"
 import { colors, spacing } from "../theme"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
@@ -31,8 +31,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   useEffect(() => {
     // Here is where you could fetch credientials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("tesfayeendash@gmail.com")
-    setAuthPassword("47474747")
+    setAuthEmail("")
+    setAuthPassword("")
   }, [])
 
   const errors: typeof validationErrors = isSubmitted ? validationErrors : ({} as any)
@@ -54,14 +54,21 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       .post("http://api.cup2022.ir/api/v1/user/login", { email: authEmail, password: authPassword })
       .then((response: ApiResponse<AuthResponse>) => {
         try {
+          if (!response.ok) {
+            console.log("error", response)
+            const problem = getGeneralApiProblem(response)
+            seterrorMessage(JSON.stringify(problem))
+            if (problem) return problem
+          }
           const rawData = response?.data
           setAuthToken(rawData.data.token)
           setIsSubmitted(false)
           setAuthPassword("")
           setAuthEmail("")
-        } catch (err) {
-          seterrorMessage(err.message)
-        }
+        } catch (err) {}
+      })
+      .catch((errors) => {
+        seterrorMessage(errors.message)
       })
 
     // We'll mock this with a fake token.
@@ -94,7 +101,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       preset="auto"
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
-      backgroundColor='#8a1538'
+      backgroundColor="#8a1538"
     >
       <Text testID="login-heading" tx="loginScreen.signIn" preset="heading" style={$signIn} />
       <TextField
@@ -110,7 +117,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         helper={errors?.authEmail}
         status={errors?.authEmail ? "error" : undefined}
         onSubmitEditing={() => authPasswordInput.current?.focus()}
-        LabelTextProps={{style:{color:"white"}}}
+        LabelTextProps={{ style: { color: "white" } }}
       />
 
       <TextField
@@ -123,7 +130,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         autoCorrect={false}
         secureTextEntry={isAuthPasswordHidden}
         labelTx="loginScreen.passwordFieldLabel"
-        LabelTextProps={{style:{color:"white"}}}
+        LabelTextProps={{ style: { color: "white" } }}
         placeholderTx="loginScreen.passwordFieldPlaceholder"
         helper={errors?.authPassword}
         status={errors?.authPassword ? "error" : undefined}
@@ -146,21 +153,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 const $screenContentContainer: ViewStyle = {
   paddingVertical: spacing.huge,
   paddingHorizontal: spacing.large,
-  marginTop:spacing.huge
+  marginTop: spacing.huge,
 }
 
 const $signIn: TextStyle = {
-  color:'white',
+  color: "white",
   marginBottom: spacing.small,
-}
-
-const $enterDetails: TextStyle = {
-  marginBottom: spacing.large,
-}
-
-const $hint: TextStyle = {
-  color: colors.tint,
-  marginBottom: spacing.medium,
 }
 
 const $textField: ViewStyle = {

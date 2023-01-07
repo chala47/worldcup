@@ -9,9 +9,9 @@
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-all.png",
     "splash": {
-      "image": "./assets/images/splash-logo-android-universal.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#191015"
+      "image": "./assets/images/splash-logo-all.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#8a1538"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -30,14 +30,26 @@
       "splash": {
         "image": "./assets/images/splash-logo-android-universal.png",
         "resizeMode": "cover",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#8a1538"
       }
     },
-    "ios": {},
-    "web": {},
+    "ios": {
+      "splash": {
+        "backgroundColor": "#8a1538",
+        "image": "./assets/images/splash-logo-ios-mobile.png",
+        "resizeMode": "contain"
+      }
+    },
+    "web": {
+      "splash": {
+        "backgroundColor": "#8a1538",
+        "image": "./assets/images/splash-logo-web.png",
+        "resizeMode": "contain"
+      }
+    },
     "extra": {
       "eas": {
-        "projectId": "969e23a6-22f4-4a5f-a80c-8da16b5a8420"
+        "projectId": "8616214b-65e0-4c43-b123-22b076d4bc6f"
       }
     }
   }

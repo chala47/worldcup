@@ -50,7 +50,7 @@ export const StandingScreen: FC<DemoTabScreenProps<"Standings">> = observer(func
       })
       setIsLoading(false)
     })()
-  }, [standingStore,authenticationStore.authToken])
+  }, [standingStore,authenticationStore])
 
   // simulate a longer refresh, if the refresh is too fast for UX
   async function manualRefresh() {
