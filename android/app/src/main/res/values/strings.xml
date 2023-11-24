@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WorldCup</string>
+    <string name="firebase_database_url">https://cindicate-5a42f-default-rtdb.firebaseio.com/</string>
+    <string name="google_api_key">AIzaSyBXEZoGfwab5rP4vMhB9mvf2qj3AnKgFbY</string>
+    <string name="google_app_id">1:1092521926242:android:8f821733461452ea78fb3b</string>
+    <string name="google_storage_bucket">cindicate-5a42f.appspot.com</string>
+    <string name="project_id">cindicate-5a42f</string>
 </resources>
